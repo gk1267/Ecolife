@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLife AI - Architecture & System Design Report</title>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #065f46;
+            --bg: #f9fafb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 60px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .header p {
+            margin: 10px 0 0;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        h2 {
+            color: var(--primary-dark);
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            margin-top: 40px;
+            font-size: 22px;
+        }
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .tech-item {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .tech-item strong {
+            display: block;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: #f9fafb;
+            color: var(--primary-dark);
+        }
+        .diagram-box {
+            background: #fafafa;
+            border: 2px dashed var(--border);
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
+            border-radius: 16px;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+        @media print {
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>EcoLife AI</h1>
+            <p>Project Architecture & System Design Specification</p>
+        </div>
+
+        <section>
+            <h2>1. Executive Summary</h2>
+            <p>EcoLife AI is a production-grade 3-Tier sustainability application designed to track, analyze, and mitigate personal carbon footprints. The system leverages a decoupled architecture, integrating a high-performance React frontend within an Electron desktop shell, powered by a secure Node.js backend and persistent MongoDB Atlas cloud storage.</p>
+        </section>
+
+        <section>
+            <h2>2. 3-Tier Architecture</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Tier 1: Presentation (Client)</strong>
+                    React.js, Vite, Electron, Lucide Icons. Handles the UI/UX and local state management.
+                </div>
+                <div class="tech-item">
+                    <strong>Tier 2: Application (Server)</strong>
+                    Node.js, Express.js. Manages business logic, CO2 calculations, and AI insights.
+                </div>
+                <div class="tech-item">
+                    <strong>Tier 3: Persistence (Data)</strong>
+                    MongoDB Atlas (Cloud). Stores user profiles, historical logs, and security credentials.
+                </div>
+                <div class="tech-item">
+                    <strong>Security Layer</strong>
+                    JWT (JSON Web Tokens), Bcrypt Hashing, SSL/TLS Encryption.
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Security Protocols</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Security Layer</th>
+                        <th>Technology</th>
+                        <th>Primary Function</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Authentication</td>
+                        <td>JWT Tokens</td>
+                        <td>Stateless permanent session management.</td>
+                    </tr>
+                    <tr>
+                        <td>Password Encryption</td>
+                        <td>Bcrypt (Salted)</td>
+                        <td>One-way hashing for user credential safety.</td>
+                    </tr>
+                    <tr>
+                        <td>Cloud Security</td>
+                        <td>IP Whitelisting</td>
+                        <td>Restricts database access to authorized servers only.</td>
+                    </tr>
+                    <tr>
+                        <td>Data Integrity</td>
+                        <td>Mongoose ODM</td>
+                        <td>Strict schema validation for all carbon logs.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>4. Core Logic Engines</h2>
+            <h3>A. Carbon Intelligence Engine</h3>
+            <p>The engine uses scientifically validated emission factors to convert user activities (km, kWh, servings) into CO2 equivalent kilograms (kg CO2e). It supports high-precision decimal tracking and multi-unit conversions (Metric/Imperial).</p>
+            
+            <h3>B. AI Recommendation Service</h3>
+            <p>A context-aware micro-service that analyzes user historical data to provide personalized, actionable eco-tips. The engine operates asynchronously to ensure a lag-free user experience.</p>
+        </section>
+
+        <section>
+            <h2>5. Project Conclusion</h2>
+            <p>The architecture of EcoLife AI ensures high scalability, low latency, and maximum data persistence. By utilizing industrial-standard cloud tools (MongoDB Atlas) and modern frameworks (React/Node), the project is ready for professional deployment and future mobile expansion.</p>
+        </section>
+
+        <div class="footer">
+            &copy; 2026 EcoLife AI Project Team | Confidential Technical Document
+        </div>
+    </div>
+</body>
+</html>
